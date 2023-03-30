@@ -61,9 +61,6 @@ jobs:
         with:
           timeout_minutes: 60
           max_attempts: 3
-          # terraform plan と terraform apply を実行する
-          command: |
-            set -e
+          # terraform planだけを実行する
+          run: terraform plan
 
-            terraform apply -auto-approve 2>&1 | tee stdout.log
-            cat stdout.log | grep -q 'Apply complete!'
