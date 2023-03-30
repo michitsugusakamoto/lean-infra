@@ -63,6 +63,7 @@ jobs:
           max_attempts: 3
           # terraform plan と terraform apply を実行する
           command: |
-            terraform plan -out=tfplan
-            terraform apply tfplan
+            set -e
 
+            terraform apply -auto-approve 2>&1 | tee stdout.log
+            cat stdout.log | grep -q 'Apply complete!'
