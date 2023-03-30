@@ -52,6 +52,8 @@ jobs:
         run: |
           terraform init
 
+          terraform workspace new ${{ matrix.flavor }}
+
           terraform workspace select ${{ matrix.flavor }}
 
       - uses: nick-fields/retry@v2
