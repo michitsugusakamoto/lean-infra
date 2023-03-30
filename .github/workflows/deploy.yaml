@@ -26,7 +26,6 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  # この workflow は deploy という名前の job を実行する
   deploy:
     runs-on: ubuntu-latest
     strategy:
@@ -45,8 +44,6 @@ jobs:
           }}
       TF_VAR_db_user: ${{ secrets.DB_USER }}
       TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-    outputs:
-      delete_staging_snapshot: ${{ steps.set-output.outputs.delete_staging_snapshot }}
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
@@ -62,7 +59,8 @@ jobs:
         with:
           timeout_minutes: 60
           max_attempts: 3
+          # terraform plan と terraform apply を実行する
           command: |
-            set -e
-
             terraform plan -out=tfplan
+            terraform apply tfplan
+
