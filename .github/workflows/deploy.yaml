@@ -1,22 +1,11 @@
-// メインブランチが更新されたら Terraform init して Terraform apply する workflow
-// ただし、stg は毎日 23:00 に、prd は毎日 17:00 に実行される
-// また、手動で workflow_dispatch することもできる
-// ただし、workflow_dispatch するときは staging_on を true にする必要がある
-// これは、stg に対してのみ有効で、prd には影響しない
-// つまり、stg に対しては毎日 23:00 に実行されるが、
-// workflow_dispatch するときは 23:00 に実行されるのではなく、
-// workflow_dispatch した時点で実行される
-// また、同時に実行される workflow は１本だけで、
-// ２本目以降はキューイングされる
-
 name: Deploy
 
-// コンカレンシーの設定
+# コンカレンシーの設定
 concurrency:
   group: deploy
   cancel-in-progress: false
 
-// この workflow が実行されるタイミング
+# この workflow が実行されるタイミング
 on:
   push:
     branches:
@@ -37,7 +26,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  // この workflow は deploy という名前の job を実行する
+  # この workflow は deploy という名前の job を実行する
   deploy:
     runs-on: ubuntu-latest
     strategy:
@@ -45,13 +34,8 @@ jobs:
         flavor: [stg, prd]
     env:
       TF_VAR_staging_on: |-
-        ${{ // github.event_name は workflow の実行タイミングを表す
-            // push なら push、schedule なら schedule、workflow_dispatch なら workflow_dispatch
-            // この場合は、push なら true、schedule なら 23:00 か 17:00 か、workflow_dispatch なら inputs.staging_on
-            // という値を返す
-            // つまり、push なら true、schedule なら 23:00 か 17:00 か、workflow_dispatch なら true か false
-            // という値を返す
-            (github.event_name == 'push' && 'true') ||
+        ${{ 
+          (github.event_name == 'push' && 'true') ||
             (
               github.event_name == 'schedule' &&
                 (github.event.schedule == '0 23 * * *' && 'true') ||
