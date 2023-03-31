@@ -11,7 +11,6 @@ terraform {
 
 provider "aws" {
   region  = "ap-northeast-1"
-  #profile = "ctag-sandbox"
   assume_role {
     role_arn = "arn:aws:iam::${local.aws_account_id[local.env]}:role/JuchuHackTerraform"
   }
