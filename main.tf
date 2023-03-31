@@ -11,7 +11,10 @@ terraform {
 
 provider "aws" {
   region  = "ap-northeast-1"
-  profile = "ctag-sandbox"
+  #profile = "ctag-sandbox"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.aws_account_id[local.env]}:role/JuchuHackTerraform"
+  }
 }
 
 module "ecs" {
@@ -62,6 +65,15 @@ module "lb" {
 
     vpc_id              = module.vpc.vpc_id
     domain              = local.domain
+}
+
+module "iam" {
+  source = "./iam"
+
+  env                = local.env
+  name               = local.name
+  aws_account_id_prd = local.aws_account_id.prd
+  aws_account_id     = local.aws_account_id[local.env]
 }
 
 module "route53" {
