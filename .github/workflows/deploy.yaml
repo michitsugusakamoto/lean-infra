@@ -61,10 +61,8 @@ jobs:
         with:
           timeout_minutes: 60
           max_attempts: 3
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          command: |
-            set -e
-
+          run: |
             terraform apply -auto-approve
+          env:
+            AWS_PROFILE: ctag-sandbox
 
