@@ -15,6 +15,11 @@ locals{
     env = "prd"
 
     is_staging_and_staging_off = local.env == "stg" && !var.staging_on
+
+    aws_account_id = {
+    stg = "259798983143"
+    prd = "259798983143"
+  }
 }
 
 variable "staging_on" {
