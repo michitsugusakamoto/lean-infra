@@ -61,8 +61,8 @@ jobs:
         with:
           timeout_minutes: 60
           max_attempts: 3
-        run: |
-          terraform apply -auto-approve
+          exec: |
+            terraform apply -auto-approve
         env:
           AWS_PROFILE: ctag-sandbox
 
