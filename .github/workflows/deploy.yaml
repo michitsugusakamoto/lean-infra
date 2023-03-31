@@ -61,9 +61,10 @@ jobs:
         with:
           timeout_minutes: 60
           max_attempts: 3
-          # terraform planだけを実行する
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           command: |
             set -e
 
-            terraform plan
+            terraform apply -auto-approve
 
