@@ -67,4 +67,3 @@ jobs:
             set -e
 
             terraform apply -auto-approve
-
